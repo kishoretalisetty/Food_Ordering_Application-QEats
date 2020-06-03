@@ -1,9 +1,15 @@
 
 #!/bin/bash
 
-while read -r lat lng; do
-    echo "Your latitude/langitude" "$lat" "$lng"
+lat=12.9
+lng=77.8
+while read -r latitude longitude
+do
+    lat=$latitude
+    lng=$longitude
 done < coordinates.txt
+
+echo "Your coordinates latitude/longitude are: " $lat $lng
 
 cd ~/workspace
 # Either clone or pull latest.
