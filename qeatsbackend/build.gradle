@@ -27,6 +27,8 @@ repositories {
     mavenCentral()
 }
 
+buildDir = '/tmp/external_build'
+
 jar {
     archiveBaseName = "qeatsbackend"
     archiveVersion = "v1"

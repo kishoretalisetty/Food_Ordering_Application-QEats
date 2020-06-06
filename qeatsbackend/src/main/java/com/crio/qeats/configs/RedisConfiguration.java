@@ -1,3 +1,4 @@
+
 package com.crio.qeats.configs;
 
 import java.time.Duration;
