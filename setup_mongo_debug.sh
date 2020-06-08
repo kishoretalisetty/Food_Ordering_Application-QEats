@@ -31,7 +31,7 @@ fi
 
 # Ensure a clean slate & populate all collections
 mongo restaurant-database --eval "db.dropDatabase()" 
-mongorestore --host localhost --db restaurant-database --gzip --archive=$QEATS_SHARED_RESOURCES/DEBUG_V2/restaurants-debug-gzipped-mongo-dump
+mongorestore --host localhost --db restaurant-database --gzip --archive=$QEATS_SHARED_RESOURCES/DEBUG_V2/restaurants-debug-gzipped-mongo-dump.gz
 
 pip3 install pymongo
 
