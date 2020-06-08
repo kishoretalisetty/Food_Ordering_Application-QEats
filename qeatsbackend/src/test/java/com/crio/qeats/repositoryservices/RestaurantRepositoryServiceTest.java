@@ -30,9 +30,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import redis.embedded.RedisServer;
 
 @SpringBootTest(classes = {QEatsApplication.class})
+@ActiveProfiles("test")
 public class RestaurantRepositoryServiceTest {
 
   private static final String FIXTURES = "fixtures/exchanges";
@@ -56,6 +58,8 @@ public class RestaurantRepositoryServiceTest {
 
   @BeforeEach
   public void setupRedisServer() throws IOException {
+    System.out.println("Redis port = " + redisPort);
+    redisConfiguration.setRedisPort(redisPort);
     server = new RedisServer(redisPort);
     server.start();
   }
