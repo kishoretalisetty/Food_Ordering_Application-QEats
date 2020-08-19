@@ -9,11 +9,17 @@ package com.crio.qeats.repositoryservices;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.crio.qeats.QEatsApplication;
 import com.crio.qeats.configs.RedisConfiguration;
 import com.crio.qeats.dto.Restaurant;
 import com.crio.qeats.models.RestaurantEntity;
+import com.crio.qeats.repositories.RestaurantRepository;
 import com.crio.qeats.utils.FixtureHelpers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,6 +27,7 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.inject.Provider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,11 +36,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import redis.embedded.RedisServer;
 
 @SpringBootTest(classes = {QEatsApplication.class})
+@DirtiesContext
 @ActiveProfiles("test")
 public class RestaurantRepositoryServiceTest {
 
@@ -48,6 +58,9 @@ public class RestaurantRepositoryServiceTest {
   @Autowired
   private Provider<ModelMapper> modelMapperProvider;
 
+  @MockBean
+  private RestaurantRepository restaurantRepository;
+
   @Autowired
   private RedisConfiguration redisConfiguration;
 
@@ -60,8 +73,6 @@ public class RestaurantRepositoryServiceTest {
   public void setupRedisServer() throws IOException {
     System.out.println("Redis port = " + redisPort);
     redisConfiguration.setRedisPort(redisPort);
-    server = new RedisServer(redisPort);
-    server.start();
   }
 
 
@@ -71,13 +82,13 @@ public class RestaurantRepositoryServiceTest {
     for (RestaurantEntity restaurantEntity : allRestaurants) {
       mongoTemplate.save(restaurantEntity, "restaurants");
     }
+    when(restaurantRepository.findAll()).thenReturn(allRestaurants);
   }
 
   @AfterEach
   void teardown() {
     mongoTemplate.dropCollection("restaurants");
     redisConfiguration.destroyCache();
-    server.stop();
   }
 
   @Test
@@ -135,6 +146,9 @@ public class RestaurantRepositoryServiceTest {
     assertNotNull(mongoTemplate);
     assertNotNull(restaurantRepositoryService);
 
+    doReturn(Optional.of(allRestaurants))
+        .when(restaurantRepository).findRestaurantsByNameExact(any());
+
     String searchFor = "A2B";
     List<Restaurant> foundRestaurantsList = restaurantRepositoryService
         .findRestaurantsByName(20.8, 30.1, searchFor,
@@ -148,6 +162,8 @@ public class RestaurantRepositoryServiceTest {
     assertNotNull(mongoTemplate);
     assertNotNull(restaurantRepositoryService);
 
+    doReturn(Optional.of(allRestaurants))
+        .when(restaurantRepository).findRestaurantsByNameExact(any());
     String searchFor = "A2B";
     List<Restaurant> foundRestaurantsList = restaurantRepositoryService
         .findRestaurantsByName(20.8, 30.1, searchFor,
@@ -157,6 +173,24 @@ public class RestaurantRepositoryServiceTest {
     assertEquals("A2B", foundRestaurantsList.get(0).getName());
     assertEquals("A2B Adyar Ananda Bhavan", foundRestaurantsList.get(1).getName());
   }
+
+  @Test
+  void restaurantsCloseByFromColdCache(@Autowired MongoTemplate mongoTemplate) throws IOException {
+    assertNotNull(mongoTemplate);
+    assertNotNull(restaurantRepositoryService);
+
+    when(restaurantRepository.findAll()).thenReturn(allRestaurants);
+
+    List<Restaurant> allRestaurantsCloseBy = restaurantRepositoryService
+        .findAllRestaurantsCloseBy(20.0, 30.0, LocalTime.of(18, 1), 3.0);
+
+    verify(restaurantRepository, times(1)).findAll();
+    assertEquals(2, allRestaurantsCloseBy.size());
+    assertEquals("11", allRestaurantsCloseBy.get(0).getRestaurantId());
+    assertEquals("12", allRestaurantsCloseBy.get(1).getRestaurantId());
+  }
+
+
 
   void searchedAttributesIsSubsetOfRetrievedRestaurantAttributes() {
   }

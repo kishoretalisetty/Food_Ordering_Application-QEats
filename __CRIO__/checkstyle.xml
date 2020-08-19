@@ -241,13 +241,8 @@
     <module name="SuppressWarnings">
       <property name="id" value="checkstyle:suppresswarnings"/>
     </module>
-    <module name="FileContentsHolder"/>
   </module>
 
-  <module name="SuppressWithNearbyCommentFilter"/>
-
-  <module name="SuppressWarningsFilter"/>
-  <module name="SuppressionCommentFilter" />
 
 
   <property name="fileExtensions" value="java, properties, xml"/>
