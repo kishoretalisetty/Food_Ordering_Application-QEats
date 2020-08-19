@@ -9,10 +9,16 @@ package com.crio.qeats.repositoryservices;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.crio.qeats.QEatsApplication;
 import com.crio.qeats.dto.Restaurant;
 import com.crio.qeats.models.RestaurantEntity;
+import com.crio.qeats.repositories.RestaurantRepository;
 import com.crio.qeats.utils.FixtureHelpers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +26,7 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javax.inject.Provider;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,11 +35,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import redis.embedded.RedisServer;
 
 @SpringBootTest(classes = {QEatsApplication.class})
+@DirtiesContext
 @ActiveProfiles("test")
 public class RestaurantRepositoryServiceTest {
 
@@ -46,6 +56,9 @@ public class RestaurantRepositoryServiceTest {
   private ObjectMapper objectMapper;
   @Autowired
   private Provider<ModelMapper> modelMapperProvider;
+
+  @MockBean
+  private RestaurantRepository restaurantRepository;
 
 
   @Value("${spring.redis.port}")
@@ -61,6 +74,7 @@ public class RestaurantRepositoryServiceTest {
     for (RestaurantEntity restaurantEntity : allRestaurants) {
       mongoTemplate.save(restaurantEntity, "restaurants");
     }
+    when(restaurantRepository.findAll()).thenReturn(allRestaurants);
   }
 
   @AfterEach
@@ -116,6 +130,24 @@ public class RestaurantRepositoryServiceTest {
 
     ModelMapper modelMapper = modelMapperProvider.get();
     assertEquals(0, allRestaurantsCloseBy.size());
+  }
+
+
+
+  @Test
+  void restaurantsCloseByFromColdCache(@Autowired MongoTemplate mongoTemplate) throws IOException {
+    assertNotNull(mongoTemplate);
+    assertNotNull(restaurantRepositoryService);
+
+    when(restaurantRepository.findAll()).thenReturn(allRestaurants);
+
+    List<Restaurant> allRestaurantsCloseBy = restaurantRepositoryService
+        .findAllRestaurantsCloseBy(20.0, 30.0, LocalTime.of(18, 1), 3.0);
+
+    verify(restaurantRepository, times(1)).findAll();
+    assertEquals(2, allRestaurantsCloseBy.size());
+    assertEquals("11", allRestaurantsCloseBy.get(0).getRestaurantId());
+    assertEquals("12", allRestaurantsCloseBy.get(1).getRestaurantId());
   }
 
 
