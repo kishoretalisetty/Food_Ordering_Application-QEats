@@ -28,11 +28,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import redis.clients.jedis.Jedis;
 import redis.embedded.RedisServer;
 
 @SpringBootTest(classes = {QEatsApplication.class})
+@DirtiesContext
 @ActiveProfiles("test")
 class RestaurantRepositoryServiceCacheTest {
 
@@ -57,17 +59,9 @@ class RestaurantRepositoryServiceCacheTest {
   @MockBean
   private RestaurantRepository mockRestaurantRepository;
 
-  @BeforeEach
-  public void setup() throws IOException {
-    System.out.println("Redis port = " + redisPort);
-    server = new RedisServer(redisPort);
-    server.start();
-  }
-
   @AfterEach
   void teardown() {
     redisConfiguration.destroyCache();
-    server.stop();
   }
 
 
