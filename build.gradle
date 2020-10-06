@@ -7,21 +7,12 @@ import java.time.Duration
  */
 
 //////////////////////////////// DO NOT CHANGE THIS FILE //////////////////////////////////
-buildscript {
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath "gradle.plugin.com.github.spotbugs:spotbugs-gradle-plugin:1.7.1"
-    }
-}
 
 plugins {
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'jacoco'
     id 'java'
+    id 'com.github.spotbugs' version '4.5.0'
 }
 
 
@@ -40,7 +31,6 @@ ext {
 
 apply plugin: "idea"
 apply plugin: "checkstyle"
-apply plugin: "com.github.spotbugs"
 
 
 version '1.0-SNAPSHOT'
@@ -57,30 +47,6 @@ task installGitHooks(type: Copy) {
     fileMode 0777
 }
 
-checkstyle {
-    toolVersion "7.8.1"
-    configFile file("${rootProject.rootDir}/__CRIO__/checkstyle.xml")
-}
-
-jacoco {
-    toolVersion = "0.8.4"
-    reportsDir = file("${rootProject.rootDir}/build/reports/jacco")
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        csv.enabled false
-        //xml.destination file("${rootProject.projectDir}/customJacocoReportDir/jacocoXml")
-        xml.destination file("${jacoco.reportsDir}/jacocoXml")
-    }
-}
-
-spotbugs {
-    toolVersion = "3.1.12"
-    sourceSets = [sourceSets.main]
-}
-
 configurations {
     all {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
@@ -89,16 +55,6 @@ configurations {
 
 allprojects {
     buildDir = '/tmp/external_build'
-    test {
-        testLogging.events ("STANDARD_ERROR")
-        testLogging.events ("STANDARD_OUT")
-    }
-    tasks.withType(com.github.spotbugs.SpotBugsTask) {
-        reports {
-            html.enabled true
-            xml.enabled false
-        }
-    }
 }
 
 subprojects {
@@ -107,7 +63,8 @@ subprojects {
     apply plugin: "checkstyle"
     apply plugin: "pmd"
     apply plugin: "jacoco"
-    apply plugin: "com.github.spotbugs"
+
+    checkstyleTest.enabled = false
 
     configurations {
         compileOnly {
@@ -154,20 +111,16 @@ subprojects {
         ignoreFailures = true
     }
 
-    spotbugs {
-        toolVersion = "3.1.12"
-        sourceSets = [sourceSets.main]
-    }
-
-    tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    spotbugsMain {
         reports {
-            html.enabled true
-            xml.enabled false
+            xml.enabled = false
+            html.enabled = true
         }
     }
+    spotbugsTest.enabled = false
 
     jacoco {
-        toolVersion = "0.7.1.201405082137"
+        toolVersion = "0.8.5"
         reportsDir = file("$buildDir/customJacocoReportDir")
     }
 
