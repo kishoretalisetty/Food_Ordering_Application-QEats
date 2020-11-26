@@ -1,5 +1,5 @@
-# CRIO_SOLUTION_AND_STUB_ONLY_START_MODULE_DEBUG_V2
-# CRIO_SOLUTION_AND_STUB_ONLY_END_MODULE_DEBUG_V2
+# CRIO_SOLUTION_AND_STUB_ONLY_START_MODULE_REDIS
+# CRIO_SOLUTION_AND_STUB_ONLY_END_MODULE_REDIS
 
 #!/bin/bash
 
@@ -33,10 +33,10 @@ fi
 
 # Ensure a clean slate & populate all collections
 mongo restaurant-database --eval "db.dropDatabase()" 
-mongorestore --host localhost --db restaurant-database --gzip --archive=$QEATS_SHARED_RESOURCES/DEBUG_V2/restaurants-debug-gzipped-mongo-dump.gz
+mongorestore --host localhost --db restaurant-database --gzip --archive=$QEATS_SHARED_RESOURCES/restaurants-perf-gzipped-mongo-dump
 
 pip3 install pymongo
 
 # Localize restaurants
 echo "Localizing restaurants for your region, so that you can see them when you load the app..."
-python3 $QEATS_SHARED_RESOURCES/localize_restaurants.py $lat $lng 200
+python3 $QEATS_SHARED_RESOURCES/localize_restaurants.py $lat $lng 250
