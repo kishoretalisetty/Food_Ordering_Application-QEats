@@ -5,13 +5,24 @@
 
 lat=12.9
 lng=77.8
-while read -r latitude longitude
-do
-    lat=$latitude
-    lng=$longitude
-done < coordinates.txt
+source ./coordinates.txt
 
-echo "Your coordinates latitude/longitude are: " $lat $lng
+if test $latitude
+then
+    lat=$latitude
+else
+  echo "latitude value not set in coordinates.txt, using default"
+fi
+
+if test $longitude
+then
+    lng=$longitude
+else
+    echo "$longitude value not set in coordinates.txt, using default"
+fi
+
+echo -e "Please note down location coordinates which we are populating data for - \n( latitude = $lat, longiyide = $lng )"
+echo "If you think this is incorrect, check your coordinates.txt file."
 
 cd ~/workspace
 # Either clone or pull latest.
