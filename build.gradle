@@ -136,4 +136,6 @@ subprojects {
     build.dependsOn installGitHooks
 }
 
+compileJava.dependsOn clean
+
 //////////////////////////////// DO NOT CHANGE THIS FILE //////////////////////////////////
