@@ -11,3 +11,6 @@ settings.gradle merge=copy-merge
 ./qeatsbackend/src/test/java/com/crio/qeats/services/CartAndOrderServiceTest.java merge=copy-merge
 ./qeatsbackend/src/test/java/com/crio/qeats/utils/GeoUtilsTest.java merge=copy-merge
 ./qeatsbackend/src/test/java/com/crio/qeats/controller/RestaurantControllerTest.java merge=copy-merge
+./setup_mongo.sh merge=copy-merge
+./setup_mongo_debug.sh merge=copy-merge
+./setup_mongo_performance.sh merge=copy-merge
