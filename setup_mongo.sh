@@ -8,6 +8,7 @@ then
     lat=$latitude
 else
   echo "latitude value not set in coordinates.txt, using default"
+  echo $'\e[32;1mPlease read this FAQ for more details - https://forum.crio.do/t/14751'
 fi
 
 if test $longitude
@@ -15,10 +16,14 @@ then
     lng=$longitude
 else
     echo "$longitude value not set in coordinates.txt, using default"
+    echo $'\e[32;1mPlease read this FAQ for more details - https://forum.crio.do/t/14751'
 fi
 
-echo -e "Please note down location coordinates which we are populating data for - \n( latitude = $lat, longiyide = $lng )"
+echo -e "Please note down location coordinates which we are populating data for - \n( latitude = $lat, longitude = $lng )"
 echo "If you think this is incorrect, check your coordinates.txt file."
+echo $'\e[32;1mPlease read this FAQ for more details - https://forum.crio.do/t/14751'
+
+exit 0
 
 cd ~/workspace
 # Either clone or pull latest.
