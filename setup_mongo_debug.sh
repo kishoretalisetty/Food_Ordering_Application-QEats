@@ -3,6 +3,8 @@
 lat=12.9
 lng=77.8
 
+source coordinates.txt
+
 if test $latitude
 then
     lat=$latitude

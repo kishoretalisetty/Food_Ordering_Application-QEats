@@ -3,6 +3,8 @@
 lat=12.9
 lng=77.8
 
+source coordinates.txt
+
 if test $latitude
 then
     lat=$latitude
@@ -22,8 +24,6 @@ fi
 echo -e "Please note down location coordinates which we are populating data for - \n( latitude = $lat, longitude = $lng )"
 echo "If you think this is incorrect, check your coordinates.txt file."
 echo $'\e[32;1mPlease read this FAQ for more details - https://forum.crio.do/t/14751'
-
-exit 0
 
 cd ~/workspace
 # Either clone or pull latest.
