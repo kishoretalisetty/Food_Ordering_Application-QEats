@@ -101,10 +101,6 @@ public class RestaurantControllerTest {
     GetRestaurantsResponse sampleResponse = loadSampleResponseList();
     assertNotNull(sampleResponse);
 
-    when(restaurantService
-        .findAllRestaurantsCloseBy(any(GetRestaurantsRequest.class), any(LocalTime.class)))
-        .thenReturn(sampleResponse);
-
     ArgumentCaptor<GetRestaurantsRequest> argumentCaptor = ArgumentCaptor
         .forClass(GetRestaurantsRequest.class);
 
@@ -135,10 +131,6 @@ public class RestaurantControllerTest {
   public void getRestaurantsBySearchStringAndLatLong() throws Exception {
     GetRestaurantsResponse sampleResponse = loadSampleResponseList();
     assertNotNull(sampleResponse);
-
-    when(restaurantService
-        .findAllRestaurantsCloseBy(any(GetRestaurantsRequest.class), any(LocalTime.class)))
-        .thenReturn(sampleResponse);
 
     ArgumentCaptor<GetRestaurantsRequest> argumentCaptor = ArgumentCaptor
         .forClass(GetRestaurantsRequest.class);
@@ -318,6 +310,21 @@ public class RestaurantControllerTest {
 
 
 
+  private GetRestaurantsResponse loadSampleResponseList() throws IOException {
+    String fixture =
+        FixtureHelpers.fixture(FIXTURES + "/list_restaurant_response.json");
+
+    return objectMapper.readValue(fixture,
+        new TypeReference<GetRestaurantsResponse>() {
+        });
+  }
+
+  private GetRestaurantsResponse loadSampleRequest() throws IOException {
+    String fixture =
+        FixtureHelpers.fixture(FIXTURES + "/create_restaurant_request.json");
+
+    return objectMapper.readValue(fixture, GetRestaurantsResponse.class);
+  }
 
 }
 
