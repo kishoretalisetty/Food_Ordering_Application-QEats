@@ -101,6 +101,10 @@ public class RestaurantControllerTest {
     GetRestaurantsResponse sampleResponse = loadSampleResponseList();
     assertNotNull(sampleResponse);
 
+    when(restaurantService
+        .findAllRestaurantsCloseBy(any(GetRestaurantsRequest.class), any(LocalTime.class)))
+        .thenReturn(sampleResponse);
+
     ArgumentCaptor<GetRestaurantsRequest> argumentCaptor = ArgumentCaptor
         .forClass(GetRestaurantsRequest.class);
 
@@ -131,6 +135,10 @@ public class RestaurantControllerTest {
   public void getRestaurantsBySearchStringAndLatLong() throws Exception {
     GetRestaurantsResponse sampleResponse = loadSampleResponseList();
     assertNotNull(sampleResponse);
+
+    when(restaurantService
+        .findAllRestaurantsCloseBy(any(GetRestaurantsRequest.class), any(LocalTime.class)))
+        .thenReturn(sampleResponse);
 
     ArgumentCaptor<GetRestaurantsRequest> argumentCaptor = ArgumentCaptor
         .forClass(GetRestaurantsRequest.class);
