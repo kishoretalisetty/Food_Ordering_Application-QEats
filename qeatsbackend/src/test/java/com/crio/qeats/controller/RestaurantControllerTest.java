@@ -137,7 +137,7 @@ public class RestaurantControllerTest {
     assertNotNull(sampleResponse);
 
     when(restaurantService
-        .findRestaurantsBySearchQuery(any(GetRestaurantsRequest.class), any(LocalTime.class)))
+        .findAllRestaurantsCloseBy(any(GetRestaurantsRequest.class), any(LocalTime.class)))
         .thenReturn(sampleResponse);
 
     ArgumentCaptor<GetRestaurantsRequest> argumentCaptor = ArgumentCaptor
