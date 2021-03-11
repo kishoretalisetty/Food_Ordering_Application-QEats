@@ -83,18 +83,20 @@ public class RestaurantRepositoryServiceTest {
   }
 
   @Test
-  void restaurantsCloseByAndOpenNow(@Autowired MongoTemplate mongoTemplate) {
-    assertNotNull(mongoTemplate);
+  void restaurantsCloseByAndOpenNow() {
     assertNotNull(restaurantRepositoryService);
 
-    List<Restaurant> allRestaurantsCloseBy = restaurantRepositoryService
-        .findAllRestaurantsCloseBy(20.0, 30.0, LocalTime.of(18, 01), 3.0);
+    when(restaurantRepository.findAll()).thenReturn(allRestaurants);
 
-    ModelMapper modelMapper = modelMapperProvider.get();
+    List<Restaurant> allRestaurantsCloseBy = restaurantRepositoryService
+        .findAllRestaurantsCloseBy(20.0, 30.0, LocalTime.of(18, 1), 3.0);
+
+    verify(restaurantRepository, times(1)).findAll();
     assertEquals(2, allRestaurantsCloseBy.size());
     assertEquals("11", allRestaurantsCloseBy.get(0).getRestaurantId());
     assertEquals("12", allRestaurantsCloseBy.get(1).getRestaurantId());
   }
+
 
   @Test
   void noRestaurantsNearBy(@Autowired MongoTemplate mongoTemplate) {
@@ -133,22 +135,6 @@ public class RestaurantRepositoryServiceTest {
   }
 
 
-
-  @Test
-  void restaurantsCloseByFromColdCache(@Autowired MongoTemplate mongoTemplate) throws IOException {
-    assertNotNull(mongoTemplate);
-    assertNotNull(restaurantRepositoryService);
-
-    when(restaurantRepository.findAll()).thenReturn(allRestaurants);
-
-    List<Restaurant> allRestaurantsCloseBy = restaurantRepositoryService
-        .findAllRestaurantsCloseBy(20.0, 30.0, LocalTime.of(18, 1), 3.0);
-
-    verify(restaurantRepository, times(1)).findAll();
-    assertEquals(2, allRestaurantsCloseBy.size());
-    assertEquals("11", allRestaurantsCloseBy.get(0).getRestaurantId());
-    assertEquals("12", allRestaurantsCloseBy.get(1).getRestaurantId());
-  }
 
 
 
