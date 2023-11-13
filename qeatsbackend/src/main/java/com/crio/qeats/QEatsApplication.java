@@ -19,6 +19,8 @@ import org.springframework.context.annotation.Scope;
 @Log4j2
 public class QEatsApplication {
 
+  ///gradlew build --info 
+
   public static void main(String[] args) {
     SpringApplication.run(QEatsApplication.class, args);
 
