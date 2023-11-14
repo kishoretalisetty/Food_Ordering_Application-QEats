@@ -34,6 +34,17 @@ public class RestaurantServiceImpl implements RestaurantService {
   @Autowired
   private RestaurantRepositoryService restaurantRepositoryService;
 
+  private boolean isTimeWithInRange(LocalTime timeNow,
+  LocalTime startTime, LocalTime endTime) {
+  return timeNow.isAfter(startTime) && timeNow.isBefore(endTime);
+  }
+
+   public boolean isPeakHour(LocalTime timeNow) {
+   return isTimeWithInRange(timeNow, LocalTime.of(7, 59, 59), LocalTime.of(10, 00, 01))
+    || isTimeWithInRange(timeNow, LocalTime.of(12, 59, 59), LocalTime.of(14, 00, 01))
+    || isTimeWithInRange(timeNow, LocalTime.of(18, 59, 59), LocalTime.of(21, 00, 01));
+   }
+
 
   // TODO: CRIO_TASK_MODULE_RESTAURANTSAPI - Implement findAllRestaurantsCloseby.
   // Check RestaurantService.java file for the interface contract.
@@ -41,35 +52,33 @@ public class RestaurantServiceImpl implements RestaurantService {
   public GetRestaurantsResponse findAllRestaurantsCloseBy(
       GetRestaurantsRequest getRestaurantsRequest, LocalTime currentTime) {
        
-        double latitude=getRestaurantsRequest.getLatitude();
-        double longitude=getRestaurantsRequest.getLongitude();
-        String searchFor=getRestaurantsRequest.getSearchFor();
+        // double latitude=getRestaurantsRequest.getLatitude();
+        // double longitude=getRestaurantsRequest.getLongitude();
+        // String searchFor=getRestaurantsRequest.getSearchFor();
 
-        // For peak hours: 8AM - 10AM, 1PM-2PM, 7PM-9PM
-         if((currentTime.isAfter(LocalTime.of(7,59)) && currentTime.isBefore(LocalTime.of(10,1))) || 
-         (currentTime.isAfter(LocalTime.of(12,59)) && currentTime.isBefore(LocalTime.of(15,1)))    ||
-         (currentTime.isAfter(LocalTime.of(18,59)) && currentTime.isBefore(LocalTime.of(21,1)))){
-         List<Restaurant> restaurantsradius3km =  restaurantRepositoryService.findAllRestaurantsCloseBy(latitude, longitude, currentTime, peakHoursServingRadiusInKms);
-         //System.out.println("#2 -> "+ restaurantsradius3km);
-        // System.out.println("-----------------------");
-         return new GetRestaurantsResponse(restaurantsradius3km);
-         }
-         else{
-         List<Restaurant> restaurantsradius5km = restaurantRepositoryService.findAllRestaurantsCloseBy(latitude, longitude, currentTime, normalHoursServingRadiusInKms);
-        // System.out.println("#2 -> "+ restaurantsradius5km);
-        return new GetRestaurantsResponse(restaurantsradius5km);
+        // // For peak hours: 8AM - 10AM, 1PM-2PM, 7PM-9PM
+        //  if((currentTime.isAfter(LocalTime.of(7,59,59)) && currentTime.isBefore(LocalTime.of(10,00,01))) || 
+        //  (currentTime.isAfter(LocalTime.of(12,59,59)) && currentTime.isBefore(LocalTime.of(14,00,01)))    ||
+        //  (currentTime.isAfter(LocalTime.of(18,59,59)) && currentTime.isBefore(LocalTime.of(21,00,01)))){
+        //  List<Restaurant> restaurantsradius3km =  restaurantRepositoryService.
+        // findAllRestaurantsCloseBy(latitude, longitude, currentTime, peakHoursServingRadiusInKms);
+        //  return new GetRestaurantsResponse(restaurantsradius3km);
+        //  }
+        //  else{
+        //  List<Restaurant> restaurantsradius5km = restaurantRepositoryService.
+        // findAllRestaurantsCloseBy(latitude, longitude, currentTime, normalHoursServingRadiusInKms);
+        // return new GetRestaurantsResponse(restaurantsradius5km);
+
+        Double servingRadiusInKms =
+        isPeakHour(currentTime) ? peakHoursServingRadiusInKms : normalHoursServingRadiusInKms;
+
+    List<Restaurant> restaurantsCloseBy = restaurantRepositoryService.findAllRestaurantsCloseBy(
+        getRestaurantsRequest.getLatitude(), getRestaurantsRequest.getLongitude(),
+        currentTime, servingRadiusInKms);
+ 
+    return new GetRestaurantsResponse(restaurantsCloseBy);
 
       }
-      // // for(int i=0; i<restaurants.size(); i++){
-      // //   List<String> attributesList=restaurants.get(i).getAttributes();
-      // //   for(int j=0; j<attributesList.size(); j++){
-      // //     if(attributesList.get(j).equals(searchFor)){
-      // //       return new GetRestaurantsResponse(restaurants.get(i).getLatitude(), restaurants.get(i).getLongitude(), searchFor);
-      // //     }
-      // //   }
-      // // }
-      // return null;
-  }
 
 
 }

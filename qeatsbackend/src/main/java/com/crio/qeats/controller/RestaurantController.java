@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -111,6 +112,16 @@ public class RestaurantController {
   //          : 5xx, if server side error.
   // Eg:
   // curl -X GET "http://localhost:8081/qeats/v1/menu?restaurantId=11"
+  //   log.info("getRestaurants called with {}", getRestaurantsRequest);
+  //   GetRestaurantsResponse getRestaurantsResponse;
+
+  //     getRestaurantsResponse = restaurantService
+  //         .findAllRestaurantsCloseBy(getRestaurantsRequest, LocalTime.now());
+  //     log.info("getRestaurants returned {}", getRestaurantsResponse);
+
+  //   return ResponseEntity.ok().body(getRestaurantsResponse);
+  // }
+
 
 
 

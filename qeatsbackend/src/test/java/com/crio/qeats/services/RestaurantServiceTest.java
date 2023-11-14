@@ -36,12 +36,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-// TODO: CRIO_TASK_MODULE_RESTAURANTSAPI
-//  Pass all the RestaurantService test cases.
-// Contains necessary test cases that check for implementation correctness.
-// Objectives:
-// 1. Make modifications to the tests if necessary so that all test cases pass
-// 2. Test RestaurantService Api by mocking RestaurantRepositoryService.
 
 @SpringBootTest(classes = {QEatsApplication.class})
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
@@ -72,8 +66,6 @@ class RestaurantServiceTest {
     GetRestaurantsResponse allRestaurantsCloseBy = restaurantService
         .findAllRestaurantsCloseBy(new GetRestaurantsRequest(20.0, 30.0),
             timeOfService); //LocalTime.of(19,00));
-
-           // System.out.println("()---->"+allRestaurantsCloseBy.getRestaurants().size());
 
     assertEquals(2, allRestaurantsCloseBy.getRestaurants().size());
     assertEquals("11", allRestaurantsCloseBy.getRestaurants().get(0).getRestaurantId());
@@ -116,6 +108,30 @@ class RestaurantServiceTest {
   }
 
 
+  private String getServingRadiusForNormalHours(List<Restaurant> restaurants, LocalTime timeOfService) {
+ 
+    when(restaurantRepositoryServiceMock
+        .findAllRestaurantsCloseBy(any(Double.class), any(Double.class), any(LocalTime.class),
+            any(Double.class)))
+        .thenReturn(restaurants);
+
+    GetRestaurantsResponse allRestaurantsCloseBy = restaurantService
+        .findAllRestaurantsCloseBy(new GetRestaurantsRequest(20.0, 30.0),
+            timeOfService); //LocalTime.of(19,00));
+
+    assertEquals(4, allRestaurantsCloseBy.getRestaurants().size());
+    assertEquals("10", allRestaurantsCloseBy.getRestaurants().get(0).getRestaurantId());
+    assertEquals("11", allRestaurantsCloseBy.getRestaurants().get(1).getRestaurantId());
+
+    ArgumentCaptor<Double> servingRadiusInKms = ArgumentCaptor.forClass(Double.class);
+    verify(restaurantRepositoryServiceMock, times(1))
+        .findAllRestaurantsCloseBy(any(Double.class), any(Double.class), any(LocalTime.class),
+            servingRadiusInKms.capture());
+
+    return servingRadiusInKms.getValue().toString();
+  }
+
+
   @Test
   void peakHourServingRadiusOf3KmsAt7Pm() throws IOException {
    //  System.out.println("---->"+loadRestaurantsDuringPeakHours().size());
@@ -133,10 +149,18 @@ class RestaurantServiceTest {
     // 2. If the expected restaurants are being returned
     // HINT: Use the `loadRestaurantsDuringNormalHours` utility method to speed things up
     // System.out.println("---->"+loadRestaurantsDuringNormalHours().size());
-    assertEquals(getServingRadius2(loadRestaurantsDuringNormalHours(), LocalTime.of(15, 1)), "5.0");
-
+    
+   List<Restaurant> res = loadRestaurantsDuringNormalHours();
+    assertEquals(getServingRadiusForNormalHours(res, LocalTime.of(16, 0)), "5.0");
   
   }
+
+  // @Test
+  // void normalHourServingRadiusIs5Kms2ndTest() throws IOException {
+
+  //   assertEquals(getServingRadius2(loadRestaurantsDuringNormalHours(), LocalTime.of(15, 1)), "5.0");
+
+  // }
 
 
 

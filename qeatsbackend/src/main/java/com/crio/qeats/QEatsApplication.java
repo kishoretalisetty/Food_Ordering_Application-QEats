@@ -19,6 +19,8 @@ import org.springframework.context.annotation.Scope;
 @Log4j2
 public class QEatsApplication {
 
+//   latitude=13.014826031028871
+// longitude=77.79430369528008
   ///gradlew build --info 
 
   public static void main(String[] args) {

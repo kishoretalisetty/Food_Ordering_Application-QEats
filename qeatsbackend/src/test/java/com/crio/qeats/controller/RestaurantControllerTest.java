@@ -60,10 +60,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.util.UriComponentsBuilder;
 
-// TODO: CRIO_TASK_MODULE_RESTAURANTSAPI
-//  Pass all the RestaurantController test cases.
-//  Make modifications to the tests if necessary.
-//  Test RestaurantController by mocking RestaurantService.
 @SpringBootTest(classes = {QEatsApplication.class})
 @MockitoSettings(strictness = Strictness.STRICT_STUBS)
 @AutoConfigureMockMvc
@@ -71,7 +67,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 @ActiveProfiles("test")
 public class RestaurantControllerTest {
 
-  //FIXME: REVIEW the api names
   private static final String RESTAURANT_API_URI = RESTAURANT_API_ENDPOINT + RESTAURANTS_API;
   private static final String MENU_API_URI = RESTAURANT_API_ENDPOINT + MENU_API;
   private static final String CART_API_URI = RESTAURANT_API_ENDPOINT + CART_API;
@@ -110,17 +105,12 @@ public class RestaurantControllerTest {
         .queryParam("longitude", "20")
         .build().toUri();
 
-        // System.out.println(uri.toString());
-        // System.out.println(RESTAURANT_API_URI + "?latitude=91&longitude=20");
-
     assertEquals(RESTAURANT_API_URI + "?latitude=91&longitude=20", uri.toString());
 
     MockHttpServletResponse response = mvc.perform(
         get(uri.toString()).accept(APPLICATION_JSON_UTF8)
     ).andReturn().getResponse();
 
-    // System.out.println(" --------> "+response.toString());
-    // System.out.println(" --------> "+ HttpStatus.BAD_REQUEST.value());
     assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
 
     uri = UriComponentsBuilder
@@ -257,10 +247,6 @@ public class RestaurantControllerTest {
     MockHttpServletResponse response = mvc.perform(
         get(uri.toString()).accept(APPLICATION_JSON_UTF8)
     ).andReturn().getResponse();
-
-    //  " 404  -----> "+response.getStatus()
-    //  " 400  -----> "+ HttpStatus.BAD_REQUEST.value()
-    //System.out.println(response.getErrorMessage());
 
     assertEquals(HttpStatus.BAD_REQUEST.value(), response.getStatus());
   }
