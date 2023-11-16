@@ -43,7 +43,6 @@ public class RestaurantServiceMockitoTestStub {
 
  
   protected Restaurant restaurant1;
-
   protected Restaurant restaurant2;
   protected Restaurant restaurant3;
   protected Restaurant restaurant4;
@@ -91,7 +90,6 @@ public class RestaurantServiceMockitoTestStub {
     GetRestaurantsResponse allRestaurantsCloseBy = restaurantService
         .findAllRestaurantsCloseBy(new GetRestaurantsRequest(20.0, 30.0),
             LocalTime.of(3, 0));
-
 
     assertEquals(2, allRestaurantsCloseBy.getRestaurants().size());
     assertEquals("11", allRestaurantsCloseBy.getRestaurants().get(0).getRestaurantId());

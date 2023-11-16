@@ -42,17 +42,20 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@JsonIgnoreProperties({"id"})
+//@JsonIgnoreProperties({"id"})
 public class Restaurant {
 
-    String restaurantId;
-    String name;
-    String city;
-    String imageUrl;
-    double latitude;
-    double longitude;
-    String opensAt;
-    String closesAt;
-    List<String> attributes;
+    @JsonIgnore
+    private String id; 
+
+    private String restaurantId;
+    private String name;
+    private String city;
+    private String imageUrl;
+    private Double latitude;
+    private Double longitude;
+    private String opensAt;
+    private String closesAt;
+    private List<String> attributes;
 }
 
