@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import javax.inject.Provider;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -38,10 +39,8 @@ import org.springframework.stereotype.Service;
 
 
 @Service
+@Primary
 public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryService {
-
-
-
 
   @Autowired
   private MongoTemplate mongoTemplate;

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 
+@Service
 public class RestaurantRepositoryServiceDummyImpl implements RestaurantRepositoryService {
   private static final String FIXTURES = "fixtures/exchanges";
   private ObjectMapper objectMapper = new ObjectMapper();
