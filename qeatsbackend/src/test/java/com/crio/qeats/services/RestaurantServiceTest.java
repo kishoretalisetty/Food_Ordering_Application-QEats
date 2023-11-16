@@ -67,6 +67,7 @@ class RestaurantServiceTest {
         .findAllRestaurantsCloseBy(new GetRestaurantsRequest(20.0, 30.0),
             timeOfService); //LocalTime.of(19,00));
 
+
     assertEquals(2, allRestaurantsCloseBy.getRestaurants().size());
     assertEquals("11", allRestaurantsCloseBy.getRestaurants().get(0).getRestaurantId());
     assertEquals("12", allRestaurantsCloseBy.getRestaurants().get(1).getRestaurantId());
@@ -119,6 +120,9 @@ class RestaurantServiceTest {
         .findAllRestaurantsCloseBy(new GetRestaurantsRequest(20.0, 30.0),
             timeOfService); //LocalTime.of(19,00));
 
+        //    System.out.println(" ---->> "+ allRestaurantsCloseBy.getRestaurants());
+
+
     assertEquals(4, allRestaurantsCloseBy.getRestaurants().size());
     assertEquals("10", allRestaurantsCloseBy.getRestaurants().get(0).getRestaurantId());
     assertEquals("11", allRestaurantsCloseBy.getRestaurants().get(1).getRestaurantId());
@@ -148,7 +152,6 @@ class RestaurantServiceTest {
     // 1. If the mocked service methods are being called
     // 2. If the expected restaurants are being returned
     // HINT: Use the `loadRestaurantsDuringNormalHours` utility method to speed things up
-    // System.out.println("---->"+loadRestaurantsDuringNormalHours().size());
     
    List<Restaurant> res = loadRestaurantsDuringNormalHours();
     assertEquals(getServingRadiusForNormalHours(res, LocalTime.of(16, 0)), "5.0");
