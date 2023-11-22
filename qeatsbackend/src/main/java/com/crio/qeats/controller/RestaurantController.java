@@ -61,8 +61,6 @@ public class RestaurantController {
     // //  log.info("getRestaurants returned {}", getRestaurantsResponse);
     // //   CHECKSTYLE:ON
 
-
-
     // return ResponseEntity.ok().body(getRestaurantsResponse);
 
     // if (getRestaurantsResponse != null && !getRestaurantsResponse.getRestaurants().isEmpty()) {
@@ -70,6 +68,14 @@ public class RestaurantController {
     //     restaurant.setName(restaurant.getName().replace("é", "?"));
     //   });
     // }
+
+      if(getRestaurantsResponse!=null && !getRestaurantsResponse.getRestaurants().isEmpty()){
+
+        getRestaurantsResponse.getRestaurants().forEach(restaurant->{
+          restaurant.setName(restaurant.getName().replace("é", "?"));
+        });
+      }
+
 
     if(getRestaurantsRequest.getLatitude() != null & getRestaurantsRequest.getLongitude() != null
       && getRestaurantsRequest.getLatitude() >= -90 && getRestaurantsRequest.getLatitude() <= 90 && 
@@ -123,17 +129,4 @@ public class RestaurantController {
   //   return ResponseEntity.ok().body(getRestaurantsResponse);
   // }
 
-
-
-
-
-
-
-
-
-
-
-
-
 }
-
