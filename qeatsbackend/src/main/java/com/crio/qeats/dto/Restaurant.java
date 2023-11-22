@@ -37,11 +37,10 @@ import lombok.ToString;
 //  ]
 // }
 
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
+
 //@JsonIgnoreProperties({"id"})
 public class Restaurant {
 
