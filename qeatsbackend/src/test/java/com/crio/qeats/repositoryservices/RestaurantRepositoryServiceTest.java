@@ -143,7 +143,38 @@ public class RestaurantRepositoryServiceTest {
     assertEquals(0, allRestaurantsCloseBy.size());
   }
 
+  @Test
+  void findRestaurantsByName(@Autowired MongoTemplate mongoTemplate) {
+    assertNotNull(mongoTemplate);
+    assertNotNull(restaurantRepositoryService);
 
+    doReturn(Optional.of(allRestaurants))
+        .when(restaurantRepository).findRestaurantsByNameExact(any());
+
+    String searchFor = "A2B";
+    List<Restaurant> foundRestaurantsList = restaurantRepositoryService
+        .findRestaurantsByName(20.8, 30.1, searchFor,
+            LocalTime.of(20, 0), 5.0);
+
+    assertEquals(2, foundRestaurantsList.size());
+  }
+
+  @Test
+  void foundRestaurantsExactMatchesFirst(@Autowired MongoTemplate mongoTemplate) {
+    assertNotNull(mongoTemplate);
+    assertNotNull(restaurantRepositoryService);
+
+    doReturn(Optional.of(allRestaurants))
+        .when(restaurantRepository).findRestaurantsByNameExact(any());
+    String searchFor = "A2B";
+    List<Restaurant> foundRestaurantsList = restaurantRepositoryService
+        .findRestaurantsByName(20.8, 30.1, searchFor,
+            LocalTime.of(20, 0), 5.0);
+
+    assertEquals(2, foundRestaurantsList.size());
+    assertEquals("A2B", foundRestaurantsList.get(0).getName());
+    assertEquals("A2B Adyar Ananda Bhavan", foundRestaurantsList.get(1).getName());
+  }
 
 
 

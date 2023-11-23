@@ -65,28 +65,28 @@ class RestaurantRepositoryServiceCacheTest {
   }
 
 
-  // @Test
-  // void restaurantsCloseByFromWarmCache(@Autowired MongoTemplate mongoTemplate) throws IOException {
-  //   assertNotNull(mongoTemplate);
-  //   assertNotNull(restaurantRepositoryService);
+  @Test
+  void restaurantsCloseByFromWarmCache(@Autowired MongoTemplate mongoTemplate) throws IOException {
+    assertNotNull(mongoTemplate);
+    assertNotNull(restaurantRepositoryService);
 
-  //   when(mockRestaurantRepository.findAll()).thenReturn(listOfRestaurants());
+    when(mockRestaurantRepository.findAll()).thenReturn(listOfRestaurants());
 
-  //   Jedis jedis = redisConfiguration.getJedisPool().getResource();
+    Jedis jedis = redisConfiguration.getJedisPool().getResource();
 
-  //   // call it twice
-  //   List<Restaurant> allRestaurantsCloseBy = restaurantRepositoryService
-  //       .findAllRestaurantsCloseBy(20.0, 30.0, LocalTime.of(18, 1), 3.0);
-  //   allRestaurantsCloseBy = restaurantRepositoryService
-  //       .findAllRestaurantsCloseBy(20.0, 30.0, LocalTime.of(18, 1), 3.0);
-  //   GeoHash geoHash = GeoHash.withCharacterPrecision(20.0, 30.0, 7);
+    // call it twice
+    List<Restaurant> allRestaurantsCloseBy = restaurantRepositoryService
+        .findAllRestaurantsCloseBy(20.0, 30.0, LocalTime.of(18, 1), 3.0);
+    allRestaurantsCloseBy = restaurantRepositoryService
+        .findAllRestaurantsCloseBy(20.0, 30.0, LocalTime.of(18, 1), 3.0);
+    GeoHash geoHash = GeoHash.withCharacterPrecision(20.0, 30.0, 7);
 
-  //   verify(mockRestaurantRepository, times(1)).findAll();
-  //   assertNotNull(jedis.get(geoHash.toBase32()));
-  //   assertEquals(2, allRestaurantsCloseBy.size());
-  //   assertEquals("11", allRestaurantsCloseBy.get(0).getRestaurantId());
-  //   assertEquals("12", allRestaurantsCloseBy.get(1).getRestaurantId());
-  // }
+    verify(mockRestaurantRepository, times(1)).findAll();
+    assertNotNull(jedis.get(geoHash.toBase32()));
+    assertEquals(2, allRestaurantsCloseBy.size());
+    assertEquals("11", allRestaurantsCloseBy.get(0).getRestaurantId());
+    assertEquals("12", allRestaurantsCloseBy.get(1).getRestaurantId());
+  }
 
   private List<RestaurantEntity> listOfRestaurants() throws IOException {
     String fixture =

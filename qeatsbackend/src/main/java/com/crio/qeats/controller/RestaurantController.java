@@ -53,19 +53,28 @@ public class RestaurantController {
     GetRestaurantsResponse getRestaurantsResponse;
     // System.out.print(" ---> "+getRestaurantsRequest);
     //   // CHECKSTYLE:OFF
+
+    if(!(getRestaurantsRequest.getLatitude() != null & getRestaurantsRequest.getLongitude() != null
+    && getRestaurantsRequest.getLatitude() >= -90 && getRestaurantsRequest.getLatitude() <= 90 && 
+    getRestaurantsRequest.getLongitude() >= -180 && getRestaurantsRequest.getLongitude() <= 180)){
+
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+    }
+    
+
+    if(getRestaurantsRequest.getSearchFor()!=null && !getRestaurantsRequest.getSearchFor().isEmpty()){
+      getRestaurantsResponse = restaurantService
+            .findRestaurantsBySearchQuery(getRestaurantsRequest, LocalTime.now());
+    }else{
       getRestaurantsResponse = restaurantService
           .findAllRestaurantsCloseBy(getRestaurantsRequest, LocalTime.now());
+    }
     // //  log.info("getRestaurants returned {}", getRestaurantsResponse);
     // //   CHECKSTYLE:ON
 
     // return ResponseEntity.ok().body(getRestaurantsResponse);
 
-    // if (getRestaurantsResponse != null && !getRestaurantsResponse.getRestaurants().isEmpty()) {
-    //   getRestaurantsResponse.getRestaurants().forEach(restaurant -> {
-    //     restaurant.setName(restaurant.getName().replace("é", "?"));
-    //   });
-    // }
-
+    
       if(getRestaurantsResponse!=null && !getRestaurantsResponse.getRestaurants().isEmpty()){
 
         getRestaurantsResponse.getRestaurants().forEach(restaurant->{
@@ -74,15 +83,16 @@ public class RestaurantController {
       }
 
 
-    if(getRestaurantsRequest.getLatitude() != null & getRestaurantsRequest.getLongitude() != null
-      && getRestaurantsRequest.getLatitude() >= -90 && getRestaurantsRequest.getLatitude() <= 90 && 
-      getRestaurantsRequest.getLongitude() >= -180 && getRestaurantsRequest.getLongitude() <= 180){
-        return ResponseEntity.ok().body(getRestaurantsResponse);
-      }else{
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-      }
+    // if(getRestaurantsRequest.getLatitude() != null & getRestaurantsRequest.getLongitude() != null
+    //   && getRestaurantsRequest.getLatitude() >= -90 && getRestaurantsRequest.getLatitude() <= 90 && 
+    //   getRestaurantsRequest.getLongitude() >= -180 && getRestaurantsRequest.getLongitude() <= 180){
+         return ResponseEntity.ok().body(getRestaurantsResponse);
+    //   }else{
+      //  return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+     // }
 
   }
+}
 
   // TIP(MODULE_MENUAPI): Model Implementation for getting menu given a restaurantId.
   // Get the Menu for the given restaurantId
@@ -126,4 +136,4 @@ public class RestaurantController {
   //   return ResponseEntity.ok().body(getRestaurantsResponse);
   // }
 
-}
+//}

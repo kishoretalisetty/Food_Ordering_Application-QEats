@@ -10,7 +10,11 @@ import ch.hsr.geohash.GeoHash;
 import com.crio.qeats.configs.RedisConfiguration;
 import com.crio.qeats.dto.Restaurant;
 import com.crio.qeats.globals.GlobalConstants;
+import com.crio.qeats.models.ItemEntity;
+import com.crio.qeats.models.MenuEntity;
 import com.crio.qeats.models.RestaurantEntity;
+import com.crio.qeats.repositories.ItemRepository;
+import com.crio.qeats.repositories.MenuRepository;
 import com.crio.qeats.repositories.RestaurantRepository;
 import com.crio.qeats.utils.GeoLocation;
 import com.crio.qeats.utils.GeoUtils;
@@ -130,56 +134,7 @@ public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryServ
         }
     
        return restaurants;
-        // List<Restaurant> restaurantList = new ArrayList<>();
-
-    // GeoLocation geoLocation = new GeoLocation(latitude, longitude);
-    // GeoHash geoHash = GeoHash.withCharacterPrecision(geoLocation.getLatitude(), geoLocation.getLongitude(), 7);
-
-    // try (Jedis jedis = redisConfiguration.getJedisPool().getResource()) {
-    //   String jsonStringFromCache = jedis.get(geoHash.toBase32());
-
-    //   if (jsonStringFromCache == null) {
-    //     // Cache needs to be updated.
-    //     String createdJsonString = "";
-    //     try {
-    //       restaurantList = findAllRestaurantsCloseFromDb(geoLocation.getLatitude(), geoLocation.getLongitude(),
-    //           currentTime, servingRadiusInKms);
-    //       createdJsonString = new ObjectMapper().writeValueAsString(restaurantList);
-    //     } catch (JsonProcessingException e) {
-    //       e.printStackTrace();
-    //     }
-
-    //     // Do operations with jedis resource
-    //     jedis.setex(geoHash.toBase32(), GlobalConstants.REDIS_ENTRY_EXPIRY_IN_SECONDS, createdJsonString);
-    //   } else {
-    //     try {
-    //       restaurantList = new ObjectMapper().readValue(jsonStringFromCache, new TypeReference<List<Restaurant>>(){});
-
-    //     } catch (IOException e) {
-    //       e.printStackTrace();
-    //     }
-    //   }
-    // }
-
-    // return restaurantList;
-
-  }
-
-  // private List<Restaurant>findAllRestaurantsCloseFromDb(Double latitude, Double longitude, LocalTime currentTime,
-  //     Double servingRadiusInKms) {
-  //   ModelMapper modelMapper = modelMapperProvider.get();
-  //   List<RestaurantEntity>restaurantEntities = restaurantRepository.findAll();
-  //   List<Restaurant> restaurants = new ArrayList<Restaurant>();
-  //   for (RestaurantEntity restaurantEntity : restaurantEntities) {
-  //     if (isRestaurantCloseByAndOpen(restaurantEntity, currentTime, latitude, longitude, servingRadiusInKms)) {
-  //       restaurants.add(modelMapper.map(restaurantEntity, Restaurant.class));
-  //     }
-  //   }
-  //   return restaurants;
-  // }
-
-
-
+      }
   
   public List<Restaurant> findAllRestaurantsMongo(Double latitude,
       Double longitude, LocalTime currentTime, Double servingRadiusInKms) {
@@ -213,7 +168,71 @@ public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryServ
     return restaurants;
   }
 
+   
+  // TODO: CRIO_TASK_MODULE_RESTAURANTSEARCH
+  // Objective:
+  // Find restaurants whose names have an exact or partial match with the search query.
+  @Override
+  public List<Restaurant> findRestaurantsByName(Double latitude, Double longitude,
+      String searchString, LocalTime currentTime, Double servingRadiusInKms) {
 
+        List<Restaurant> restaurants =
+        findAllRestaurantsCloseBy(latitude, longitude, currentTime, servingRadiusInKms);
+    List<Restaurant> res = new ArrayList<>();
+    for (Restaurant r : restaurants) {
+      if (r.getName().toLowerCase().contains(searchString.toLowerCase())) {
+        res.add(r);
+      }
+    }
+    return res;
+  }
+
+
+  // TODO: CRIO_TASK_MODULE_RESTAURANTSEARCH
+  // Objective:
+  // Find restaurants whose attributes (cuisines) intersect with the search query.
+  @Override
+  public List<Restaurant> findRestaurantsByAttributes(
+      Double latitude, Double longitude,
+      String searchString, LocalTime currentTime, Double servingRadiusInKms) {
+
+        List<Restaurant> restaurants =
+        findAllRestaurantsCloseBy(latitude, longitude, currentTime, servingRadiusInKms);
+
+        List<Restaurant> res = new ArrayList<>();
+        for (Restaurant r : restaurants) {
+          if (r.getAttributes().contains(searchString)) {
+            res.add(r);
+          }
+        }
+        return res;
+  }
+
+
+
+  // TODO: CRIO_TASK_MODULE_RESTAURANTSEARCH
+  // Objective:
+  // Find restaurants which serve food items whose names form a complete or partial match
+  // with the search query.
+
+  @Override
+  public List<Restaurant> findRestaurantsByItemName(
+      Double latitude, Double longitude,
+      String searchString, LocalTime currentTime, Double servingRadiusInKms) {
+
+
+     return new ArrayList();
+  }
+
+  // TODO: CRIO_TASK_MODULE_RESTAURANTSEARCH
+  // Objective:
+  // Find restaurants which serve food items whose attributes intersect with the search query.
+  @Override
+  public List<Restaurant> findRestaurantsByItemAttributes(Double latitude, Double longitude,
+      String searchString, LocalTime currentTime, Double servingRadiusInKms) {
+
+     return new ArrayList();
+  }
 
 
   /**
@@ -234,4 +253,53 @@ public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryServ
 
 
 }
+
+  // List<Restaurant> restaurantList = new ArrayList<>();
+
+    // GeoLocation geoLocation = new GeoLocation(latitude, longitude);
+    // GeoHash geoHash = GeoHash.withCharacterPrecision(geoLocation.getLatitude(), geoLocation.getLongitude(), 7);
+
+    // try (Jedis jedis = redisConfiguration.getJedisPool().getResource()) {
+    //   String jsonStringFromCache = jedis.get(geoHash.toBase32());
+
+    //   if (jsonStringFromCache == null) {
+    //     // Cache needs to be updated.
+    //     String createdJsonString = "";
+    //     try {
+    //       restaurantList = findAllRestaurantsCloseFromDb(geoLocation.getLatitude(), geoLocation.getLongitude(),
+    //           currentTime, servingRadiusInKms);
+    //       createdJsonString = new ObjectMapper().writeValueAsString(restaurantList);
+    //     } catch (JsonProcessingException e) {
+    //       e.printStackTrace();
+    //     }
+
+    //     // Do operations with jedis resource
+    //     jedis.setex(geoHash.toBase32(), GlobalConstants.REDIS_ENTRY_EXPIRY_IN_SECONDS, createdJsonString);
+    //   } else {
+    //     try {
+    //       restaurantList = new ObjectMapper().readValue(jsonStringFromCache, new TypeReference<List<Restaurant>>(){});
+
+    //     } catch (IOException e) {
+    //       e.printStackTrace();
+    //     }
+    //   }
+    // }
+
+    // return restaurantList;
+
+  //}
+
+  // private List<Restaurant>findAllRestaurantsCloseFromDb(Double latitude, Double longitude, LocalTime currentTime,
+  //     Double servingRadiusInKms) {
+  //   ModelMapper modelMapper = modelMapperProvider.get();
+  //   List<RestaurantEntity>restaurantEntities = restaurantRepository.findAll();
+  //   List<Restaurant> restaurants = new ArrayList<Restaurant>();
+  //   for (RestaurantEntity restaurantEntity : restaurantEntities) {
+  //     if (isRestaurantCloseByAndOpen(restaurantEntity, currentTime, latitude, longitude, servingRadiusInKms)) {
+  //       restaurants.add(modelMapper.map(restaurantEntity, Restaurant.class));
+  //     }
+  //   }
+  //   return restaurants;
+  // }
+
 
