@@ -18,8 +18,10 @@ import org.springframework.context.annotation.Scope;
 @SpringBootApplication
 @Log4j2
 public class QEatsApplication {
-
-//   latitude=13.014826031028871
+  // ./gradlew clean 
+  //  ./gradlew bootrun
+  // ./setup_mongo_performance.sh
+  //   latitude=13.014826031028871
 // longitude=77.79430369528008
   ///gradlew build --info 
 
