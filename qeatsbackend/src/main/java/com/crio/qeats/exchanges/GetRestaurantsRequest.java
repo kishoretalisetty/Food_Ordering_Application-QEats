@@ -41,5 +41,12 @@ public GetRestaurantsRequest(@NonNull Double latittude, @NonNull Double longitud
 
 private String searchFor;
 
+public boolean hasSearchQuery() {
+    if (searchFor == null) {
+      return false;
+    }
+    return !searchFor.equals("");
+  }
+
 }
 
