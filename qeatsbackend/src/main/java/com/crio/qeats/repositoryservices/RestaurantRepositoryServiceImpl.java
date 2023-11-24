@@ -26,6 +26,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -172,41 +173,90 @@ public class RestaurantRepositoryServiceImpl implements RestaurantRepositoryServ
   // TODO: CRIO_TASK_MODULE_RESTAURANTSEARCH
   // Objective:
   // Find restaurants whose names have an exact or partial match with the search query.
+
   @Override
   public List<Restaurant> findRestaurantsByName(Double latitude, Double longitude,
-      String searchString, LocalTime currentTime, Double servingRadiusInKms) {
+                                                String searchString, LocalTime currentTime,
+                                                Double servingRadiusInKms) {
+    final String regexExact = String.format("^%s$", searchString);
+    final String regexAll = String.format(".*%s.*", searchString);
 
-        List<Restaurant> restaurants =
-        findAllRestaurantsCloseBy(latitude, longitude, currentTime, servingRadiusInKms);
-    List<Restaurant> res = new ArrayList<>();
-    for (Restaurant r : restaurants) {
-      if (r.getName().toLowerCase().contains(searchString.toLowerCase())) {
-        res.add(r);
+    LinkedHashSet<RestaurantEntity> restaurantEntityLinkedHashSet = new LinkedHashSet<>();
+
+    Query queryExact = new Query(Criteria.where("name").regex(regexExact, "i"));
+    Query queryRestMatches = new Query(Criteria.where("name").regex(regexAll, "i"));
+
+
+    restaurantEntityLinkedHashSet.addAll(mongoTemplate.find(queryExact, RestaurantEntity.class));
+    restaurantEntityLinkedHashSet.addAll(mongoTemplate.find(queryRestMatches,
+        RestaurantEntity.class));
+
+    List<Restaurant> restaurants = new ArrayList<>();
+    restaurantEntityLinkedHashSet.forEach(restaurantEntity -> {
+      if (isRestaurantCloseByAndOpen(restaurantEntity, currentTime, latitude, longitude,
+          servingRadiusInKms)) {
+        restaurants.add(modelMapperProvider.get().map(restaurantEntity, Restaurant.class));
       }
-    }
-    return res;
+    });
+    return restaurants;
   }
+  // @Override
+  // public List<Restaurant> findRestaurantsByName(Double latitude, Double longitude,
+  //     String searchString, LocalTime currentTime, Double servingRadiusInKms) {
+
+  //       List<Restaurant> restaurants =
+  //       findAllRestaurantsCloseBy(latitude, longitude, currentTime, servingRadiusInKms);
+  //   List<Restaurant> res = new ArrayList<>();
+  //   for (Restaurant r : restaurants) {
+  //     if (r.getName().toLowerCase().contains(searchString.toLowerCase())) {
+  //       res.add(r);
+  //     }
+  //   }
+  //   return res;
+  // }
 
 
   // TODO: CRIO_TASK_MODULE_RESTAURANTSEARCH
   // Objective:
   // Find restaurants whose attributes (cuisines) intersect with the search query.
+
   @Override
   public List<Restaurant> findRestaurantsByAttributes(
       Double latitude, Double longitude,
       String searchString, LocalTime currentTime, Double servingRadiusInKms) {
+    final String regexAll = String.format(".*%s.*", searchString);
+    Query queryRestMatches = new Query();
+    queryRestMatches.addCriteria(Criteria.where("attributes").in(regexAll, "i"));
+    List<RestaurantEntity> restaurantEntities =
+        new ArrayList<>(mongoTemplate.find(queryRestMatches, RestaurantEntity.class));
 
-        List<Restaurant> restaurants =
-        findAllRestaurantsCloseBy(latitude, longitude, currentTime, servingRadiusInKms);
-
-        List<Restaurant> res = new ArrayList<>();
-        for (Restaurant r : restaurants) {
-          if (r.getAttributes().contains(searchString)) {
-            res.add(r);
-          }
-        }
-        return res;
+        List<Restaurant> restaurants = new ArrayList<>();
+    restaurantEntities.forEach(restaurantEntity -> {
+      if (isRestaurantCloseByAndOpen(restaurantEntity, currentTime, latitude, longitude,
+          servingRadiusInKms)) {
+        restaurants.add(modelMapperProvider.get().map(restaurantEntity, Restaurant.class));
+      }
+    });
+    return restaurants;
   }
+
+
+  // @Override
+  // public List<Restaurant> findRestaurantsByAttributes(
+  //     Double latitude, Double longitude,
+  //     String searchString, LocalTime currentTime, Double servingRadiusInKms) {
+
+  //       List<Restaurant> restaurants =
+  //       findAllRestaurantsCloseBy(latitude, longitude, currentTime, servingRadiusInKms);
+
+  //       List<Restaurant> res = new ArrayList<>();
+  //       for (Restaurant r : restaurants) {
+  //         if (r.getAttributes().contains(searchString)) {
+  //           res.add(r);
+  //         }
+  //       }
+  //       return res;
+  // }
 
 
 
