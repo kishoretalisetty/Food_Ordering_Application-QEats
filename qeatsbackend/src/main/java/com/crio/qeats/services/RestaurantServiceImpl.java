@@ -21,8 +21,8 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-import io.micrometer.core.instrument.util.StringUtils;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -127,9 +127,9 @@ public class RestaurantServiceImpl implements RestaurantService {
       e.printStackTrace();
     }
 
-    // restaurants.forEach(restaurant -> {
-    //   restaurant.setName(StringUtils.stripAccents(restaurant.getName()));
-    // });
+    restaurants.forEach(restaurant -> {
+      restaurant.setName(StringUtils.stripAccents(restaurant.getName()));
+    });
     return new GetRestaurantsResponse(restaurants);
   }
 
