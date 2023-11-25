@@ -1,10 +1,3 @@
-
-/*
- *
- *  * Copyright (c) Crio.Do 2019. All rights reserved
- *
- */
-
 package com.crio.qeats.repositoryservices;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

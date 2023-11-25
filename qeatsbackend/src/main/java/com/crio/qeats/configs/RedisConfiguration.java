@@ -32,10 +32,6 @@ public class RedisConfiguration {
     redisPort = port;
   }
 
-  /**
-   * Initializes the cache to be used in the code.
-   * TIP: Look in the direction of `JedisPool`.
-   */
   @PostConstruct
   public void initCache() {
     final JedisPoolConfig poolConfig = buildPoolConfig();

@@ -1,16 +1,8 @@
-/*
- *
- *  * Copyright (c) Crio.Do 2019. All rights reserved
- *
- */
-
 package com.crio.qeats.repositoryservices;
 
 import com.crio.qeats.dto.Restaurant;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.concurrent.Future;
-import org.springframework.scheduling.annotation.Async;
 
 public interface RestaurantRepositoryService {
 

@@ -1,9 +1,3 @@
-/*
- *
- *  * Copyright (c) Crio.Do 2019. All rights reserved
- *
- */
-
 package com.crio.qeats.exchanges;
 
 import com.crio.qeats.dto.Restaurant;
@@ -12,8 +6,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// TODO: CRIO_TASK_MODULE_RESTAURANTSAPI
-//  Implement GetRestaurantsResponse.
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class GetRestaurantsResponse {
+    List<Restaurant> restaurants;
+}
+
 // Complete the class such that it produces the following JSON during serialization.
 // {
 //  "restaurants": [
@@ -46,11 +45,4 @@ import lombok.NoArgsConstructor;
 //      ]
 //    }
 //  ]
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class GetRestaurantsResponse {
-    List<Restaurant> restaurants;
-}
-
 // }

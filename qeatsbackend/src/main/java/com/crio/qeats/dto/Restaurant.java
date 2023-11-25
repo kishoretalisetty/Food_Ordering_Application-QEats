@@ -1,10 +1,3 @@
-
-/*
- *
- *  * Copyright (c) Crio.Do 2019. All rights reserved
- *
- */
-
 package com.crio.qeats.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,7 +10,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// TODO: CRIO_TASK_MODULE_SERIALIZATION
 //  Implement Restaurant class.
 // Complete the class such that it produces the following JSON during serialization.
 // {

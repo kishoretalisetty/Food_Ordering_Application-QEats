@@ -1,10 +1,3 @@
-
-/*
- *
- *  * Copyright (c) Crio.Do 2019. All rights reserved
- *
- */
-
 package com.crio.qeats.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -89,8 +82,6 @@ class RestaurantServiceTest {
         .findAllRestaurantsCloseBy(new GetRestaurantsRequest(20.0, 30.0),
             timeOfService); //normal hours
 
-           // System.out.println("()---->"+allRestaurantsCloseBy.getRestaurants().size());
-
     assertEquals(4, allRestaurantsCloseBy.getRestaurants().size());
     assertEquals("10", allRestaurantsCloseBy.getRestaurants().get(0).getRestaurantId());
     assertEquals("11", allRestaurantsCloseBy.getRestaurants().get(1).getRestaurantId());
@@ -103,8 +94,7 @@ class RestaurantServiceTest {
         .findAllRestaurantsCloseBy(any(Double.class), any(Double.class), any(LocalTime.class),
             servingRadiusInKms.capture());
 
-           // System.out.println(" ...ANS = "+ servingRadiusInKms.getValue().toString());
-    return servingRadiusInKms.getValue().toString();
+          return servingRadiusInKms.getValue().toString();
   }
 
 
@@ -145,8 +135,7 @@ class RestaurantServiceTest {
   @Test
   void normalHourServingRadiusIs5Kms() throws IOException {
 
-    // TODO: CRIO_TASK_MODULE_RESTAURANTSAPI
-    // We must ensure the API retrieves only restaurants that are closeby and are open
+     // We must ensure the API retrieves only restaurants that are closeby and are open
     // In short, we need to test:
     // 1. If the mocked service methods are being called
     // 2. If the expected restaurants are being returned
