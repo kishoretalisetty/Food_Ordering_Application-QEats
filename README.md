@@ -2,6 +2,13 @@
 ## Overview
 The QEats Backend Service is a crucial component of the QEats application ecosystem, responsible for managing restaurant data and serving restaurant information to the QEats frontend application. It provides a set of RESTful APIs that allow clients to perform operations such as retrieving restaurants based on proximity and search queries. The backend is implemented in Java using the Spring Boot framework, providing scalability, flexibility, and robustness.
 
+## Technologies Used
+
+**Languages :-** Java
+
+**Technologies/Frameworks :-** Jackson, Lombok, Unit testing, HTTP, REST, Spring Boot, Interfaces, Mockito, Mongo DB,Spring Data, Interfaces, Redis, JMeter, Scientific Debugging
+
+
 ## Features
 **Restaurant Management:** CRUD (Create, Read, Update, Delete) operations for managing restaurant data, including restaurant details such as name, location, opening hours, and menu items.
 **Restaurant Search:** The backend offers endpoints to retrieve restaurants based on various parameters, including geographical proximity, restaurant name, cuisine, and menu items.
@@ -98,16 +105,6 @@ Ensure to configure the following properties in the application.properties file:
   - Artifact ID: `spring-boot-starter-test`
   - Version: 2.0.+
   - [Documentation](https://spring.io/guides/gs/testing-web/)
-
-## Contributors
-The following individuals have contributed to the development of the QEats Backend Service:
-
-
-
-
-
-
-
 
 
 # Food_Ordering_Application-QEats
