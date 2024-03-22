@@ -4,16 +4,14 @@ The QEats Backend Service is a crucial component of the QEats application ecosys
 
 ## Technologies Used
 
-**Languages :-** Java
-
-**Technologies/Frameworks :-** Jackson, Lombok, Unit testing, HTTP, REST, Spring Boot, Interfaces, Mockito, Mongo DB,Spring Data, Interfaces, Redis, JMeter, Scientific Debugging
-
-
+- **Languages :-** Java
+- **Technologies/Frameworks :-** Jackson, Lombok, Unit testing, HTTP, REST, Spring Boot, Interfaces, Mockito, Spring Data, Interfaces, Redis, JMeter, Scientific Debugging
+- **DataBase :-** Mongo DB
 ## Features
-**Restaurant Management:** CRUD (Create, Read, Update, Delete) operations for managing restaurant data, including restaurant details such as name, location, opening hours, and menu items.
-**Restaurant Search:** The backend offers endpoints to retrieve restaurants based on various parameters, including geographical proximity, restaurant name, cuisine, and menu items.
-**Multithreaded Search:** To optimize search query performance, the backend utilizes multithreading techniques to parallelize and expedite the processing of search queries, resulting in faster response times for clients.
-**Geographical Utilities:** The backend includes utility methods for geographical calculations, such as distance calculation between two geographic coordinates, facilitating location-based search functionalities.
+- **Restaurant Management:** CRUD (Create, Read, Update, Delete) operations for managing restaurant data, including restaurant details such as name, location, opening hours, and menu items.
+- **Restaurant Search:** The backend offers endpoints to retrieve restaurants based on various parameters, including geographical proximity, restaurant name, cuisine, and menu items.
+- **Multithreaded Search:** To optimize search query performance, the backend utilizes multithreading techniques to parallelize and expedite the processing of search queries, resulting in faster response times for clients.
+-**Geographical Utilities:** The backend includes utility methods for geographical calculations, such as distance calculation between two geographic coordinates, facilitating location-based search functionalities.
 
 ## Setup
 Clone Repository: Begin by cloning the repository to your local development environment.
@@ -32,12 +30,12 @@ git clone <repository_url>
 ## API Endpoints
 The backend service exposes the following RESTful API endpoints:
 
-**GET /restaurants:** Retrieve all restaurants.
-**GET /restaurants/{restaurantId}:** Retrieve details of a specific restaurant.
-**POST /restaurants:** Create a new restaurant.
-**PUT /restaurants/{restaurantId}:** Update details of a restaurant.
-**DELETE /restaurants/{restaurantId}:** Delete a restaurant.
-**GET /restaurants/search:** Search for restaurants based on proximity and search queries.
+- **GET /restaurants:** Retrieve all restaurants.
+- **GET /restaurants/{restaurantId}:** Retrieve details of a specific restaurant.
+- **POST /restaurants:** Create a new restaurant.
+- **PUT /restaurants/{restaurantId}:** Update details of a restaurant.
+- **DELETE /restaurants/{restaurantId}:** Delete a restaurant.
+- **GET /restaurants/search:** Search for restaurants based on proximity and search queries.
 
 For detailed information about request and response formats, please refer to the API documentation or Swagger UI integrated with the application.
 
@@ -106,15 +104,4 @@ Ensure to configure the following properties in the application.properties file:
   - Version: 2.0.+
   - [Documentation](https://spring.io/guides/gs/testing-web/)
 
-
-# Food_Ordering_Application-QEats
-Languages :- Java
-Technologies/Frameworks :-Jackson, Lombok, Unit testing, HTTP, REST, Spring Boot, Interfaces, Mockito, Mongo DB,Spring Data, Interfaces, Redis, JMeter, Scientific Debugging
-
-QEats is a popular food ordering app that allows users to browse and order their favorite dishes from nearby restaurants. During the course of this project,
-
-1. Built different parts of the QEats backend which is a Spring Boot application.
-2. Several REST API endpoints are implemented to query restaurant information and place food orders.
-3. Improved the app performance under large load scenarios as well as included an advanced search feature in the app.
-
-Link:- https://www.crio.do/learn/portfolio/kishorethalisetty/ME_QEATS_V2/?edit=true
+For more details:- https://www.crio.do/learn/portfolio/kishorethalisetty/ME_QEATS_V2/?edit=true
